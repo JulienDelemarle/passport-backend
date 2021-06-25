@@ -18,12 +18,11 @@ router.post('/signup', async (req, res) => {
     const token = jwt.sign(req.body, secretOrPrivateKey);
     res.json({ user: req.body, token: token });
   } catch (err) {
-    console.log(err);
     res.status(400).send(err);
   }
 });
 
-router.get('/login', passport.authenticate('local'), async (req, res) => {
+router.post('/login', passport.authenticate('local'), async (req, res) => {
   const token = jwt.sign(JSON.stringify(req.user), secretOrPrivateKey);
   res.json({ user: req.user, token: token });
 });

@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const JWTStrategy = require('passport-jwt').Strategy;
@@ -19,21 +18,19 @@ passport.use(
       try {
         const [[results]] = await db.query(sql, sqlFields);
 
-        if (!results.email) {
-          throw new Error('wrong email');
+        if (!results) {
+          throw 'wrong email';
         }
 
         if (!bcrypt.compareSync(formPassword, results.password)) {
-          throw new Error('wrong password');
+          throw 'wrong password';
         }
 
         delete results.password;
         done(null, results);
       } catch (err) {
-        console.log(err);
         done(err);
       }
-      res.send(`Not yet! (${email})`);
     }
   )
 );
